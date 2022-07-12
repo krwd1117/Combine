@@ -5,5 +5,6 @@
         <page name='Subject_CurrentValueSubject'/>
         <page name='Operator_Prepend'/>
         <page name='Operator_Append'/>
+        <page name='Udemy_Collect'/>
     </pages>
 </playground>

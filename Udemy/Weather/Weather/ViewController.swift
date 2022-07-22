@@ -14,7 +14,12 @@ class ViewController: UIViewController {
     @IBOutlet weak var textField: UITextField!
     
     private let webService = WebService()
+    
+    /// 방법 1.
     private var cancellable: AnyCancellable?
+    
+    /// 방법 2.
+    //    private var cancellable = Set<AnyCancellable>()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -47,9 +52,11 @@ class ViewController: UIViewController {
     private func setupPublishers() {
         let publisher = NotificationCenter.default.publisher(for: UITextField.textDidChangeNotification, object: textField)
         
-        
-        // nil은 필요 없으므로 compactMap
+        /// 방법 1.
+        /// 상단의 cancellable 주석도 방법1로 바꿔야함
+        /// nil은 필요 없으므로 compactMap
         cancellable = publisher.compactMap {
+            //        publisher.compactMap {
             // UITextField의 값을 감지하므로 UITextField로 캐스팅
             ($0.object as! UITextField).text?
             // 공백을 포함할 수도 있으므로 addingPercentEncoding을 사용한다.
@@ -58,20 +65,46 @@ class ViewController: UIViewController {
         }.debounce(for: .milliseconds(500), scheduler: RunLoop.main)
             .flatMap { city in
                 return self.webService.fetchWeather(city: city)
-//                    // 오류가 발생하면 빈 값을 반환
-//                    .catch { _ in Empty() }
-                    // 오류가 발생하면 Weather의 placeHolder 반환
+                //                    // 오류가 발생하면 빈 값을 반환
+                //                    .catch { _ in Empty() }
+                // 오류가 발생하면 Weather의 placeHolder 반환
                     .catch { _ in Just(Weather.placeHolder) }
-                    // 성공시 반환받은 날씨 모델
+                // 성공시 반환받은 날씨 모델
                     .map { $0 }
-        }.sink {
-            
-            guard let temp = $0.temp else {
-                return self.temperatureLabel.text = ""
+            }.sink {
+                guard let temp = $0.temp else { return self.temperatureLabel.text = "" }
+                self.temperatureLabel.text = "\(temp)°F"
             }
-            
-            self.temperatureLabel.text = "\(temp)°F"
-        }
+        
+        /* /// 방법2.
+         /// 상단의 cancellable 주석도 방법2로 바꿔야함
+         publisher.compactMap {
+         // UITextField의 값을 감지하므로 UITextField로 캐스팅
+         ($0.object as! UITextField).text?
+         // 공백을 포함할 수도 있으므로 addingPercentEncoding을 사용한다.
+         .addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)
+         // 입력 즉시 반응하는 것이 아닌, 입력 후 일정 시간 뒤 메서드를 실행시키기 위해 사용
+         }.debounce(for: .milliseconds(500), scheduler: RunLoop.main)
+         .flatMap { city in
+         return self.webService.fetchWeather(city: city)
+         //                    // 오류가 발생하면 빈 값을 반환
+         //                    .catch { _ in Empty() }
+         // 오류가 발생하면 Weather의 placeHolder 반환
+         .catch { _ in Just(Weather.placeHolder) }
+         // 성공시 반환받은 날씨 모델
+         .map { $0 }
+         }.sink {
+         guard let temp = $0.temp else { return self.temperatureLabel.text = "" }
+         self.temperatureLabel.text = "\(temp)°F"
+         }
+         .store(in: &cancellable)
+         */
+        
+        
+        
+        
+        
+        
     }
 }
 

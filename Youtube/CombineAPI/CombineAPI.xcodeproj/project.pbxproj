@@ -15,6 +15,7 @@
 		2875230E288D0D5200C923D6 /* Post.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2875230D288D0D5200C923D6 /* Post.swift */; };
 		28752310288D0D7E00C923D6 /* APIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2875230F288D0D7E00C923D6 /* APIService.swift */; };
 		28752312288D0F2C00C923D6 /* ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28752311288D0F2C00C923D6 /* ViewModel.swift */; };
+		28AB8F6B288D1D7F00275896 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28AB8F6A288D1D7F00275896 /* User.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -27,6 +28,7 @@
 		2875230D288D0D5200C923D6 /* Post.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Post.swift; sourceTree = "<group>"; };
 		2875230F288D0D7E00C923D6 /* APIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIService.swift; sourceTree = "<group>"; };
 		28752311288D0F2C00C923D6 /* ViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModel.swift; sourceTree = "<group>"; };
+		28AB8F6A288D1D7F00275896 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -63,8 +65,7 @@
 				287522FF288D0AEF00C923D6 /* ContentView.swift */,
 				28752301288D0AF100C923D6 /* Assets.xcassets */,
 				28752303288D0AF100C923D6 /* Preview Content */,
-				2875230B288D0CC300C923D6 /* Todo.swift */,
-				2875230D288D0D5200C923D6 /* Post.swift */,
+				28AB8F6C288D1D8300275896 /* Model */,
 				2875230F288D0D7E00C923D6 /* APIService.swift */,
 				28752311288D0F2C00C923D6 /* ViewModel.swift */,
 			);
@@ -77,6 +78,16 @@
 				28752304288D0AF100C923D6 /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		28AB8F6C288D1D8300275896 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				2875230B288D0CC300C923D6 /* Todo.swift */,
+				2875230D288D0D5200C923D6 /* Post.swift */,
+				28AB8F6A288D1D7F00275896 /* User.swift */,
+			);
+			path = Model;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -155,6 +166,7 @@
 				287522FE288D0AEF00C923D6 /* CombineAPIApp.swift in Sources */,
 				28752312288D0F2C00C923D6 /* ViewModel.swift in Sources */,
 				2875230E288D0D5200C923D6 /* Post.swift in Sources */,
+				28AB8F6B288D1D7F00275896 /* User.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

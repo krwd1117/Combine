@@ -84,4 +84,40 @@ class ViewModel: ObservableObject {
             }.store(in: &subscriptions)
     }
     
+    /// todos 호출 후 응답 결과에 따라 다음 api 호출 결정
+    /// todos.count < 200 ? 포스트 호출 : 유저 호출
+    func fetchTodosAndCallConditionally() {
+        let shouldFetchPosts: AnyPublisher<Bool, Error> =
+        APIService.shared.fetchTodos()
+            .map { $0.count < 200 }
+            .eraseToAnyPublisher()
+        
+        shouldFetchPosts.filter {$0 == true}
+            .flatMap { _ in
+                return APIService.shared.fetchPosts()
+            }.sink { completion in
+                switch completion {
+                case .failure(let error):
+                    print("ERROR: \(error.localizedDescription)")
+                case .finished :
+                    print("DEBUG: fetchTodosAndCallConditionally SUCCESS")
+                }
+            } receiveValue: { posts in
+                print("DEBUG Posts: \(posts.count)")
+            }.store(in: &subscriptions)
+        
+        shouldFetchPosts.filter {$0 != true}
+            .flatMap { _ in
+                return APIService.shared.fetchUsers()
+            }.sink { completion in
+                switch completion {
+                case .failure(let error):
+                    print("ERROR: \(error.localizedDescription)")
+                case .finished :
+                    print("DEBUG: fetchUsers SUCCESS")
+                }
+            } receiveValue: { users in
+                print("DEBUG Posts: \(users.count)")
+            }.store(in: &subscriptions)
+    }
 }

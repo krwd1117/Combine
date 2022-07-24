@@ -11,6 +11,7 @@ import Combine
 enum API {
     case fetchTodos // 할 일 가져오기
     case fetchPosts // 포스트 가져오기
+    case fetchUsers
     
     var url: URL {
         switch self {
@@ -18,6 +19,8 @@ enum API {
             return URL(string: "https://jsonplaceholder.typicode.com/todos")!
         case .fetchPosts:
             return URL(string: "https://jsonplaceholder.typicode.com/posts")!
+        case .fetchUsers:
+            return URL(string: "https://jsonplaceholder.typicode.com/users")!
         }
     }
 }
@@ -48,6 +51,13 @@ struct APIService {
             .eraseToAnyPublisher()
     }
     
+    func fetchUsers() -> AnyPublisher<[User], Error> {
+        return URLSession.shared.dataTaskPublisher(for: API.fetchUsers.url)
+            .map { $0.data }
+            .decode(type: [User].self, decoder: JSONDecoder())
+            .eraseToAnyPublisher()
+    }
+    
     /// Todos, Posts 동시 호출
     /// - Returns:
     func fetchTodosAndPostsAtTheSameTime() -> AnyPublisher<([Todo], [Post]), Error> {
@@ -75,4 +85,5 @@ struct APIService {
                     return fetchPosts().eraseToAnyPublisher()
                 }.eraseToAnyPublisher()
     }
+
 }

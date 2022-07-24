@@ -8,6 +8,8 @@
 import Foundation
 import Combine
 
+import Alamofire
+
 enum API {
     case fetchTodos // 할 일 가져오기
     case fetchPosts // 포스트 가져오기
@@ -30,16 +32,28 @@ struct APIService {
     static let shared = APIService()
     
     func fetchTodos() -> AnyPublisher<[Todo], Error> {
-        return URLSession.shared.dataTaskPublisher(for: API.fetchTodos.url)
-            .map { $0.data }
-            .decode(type: [Todo].self, decoder: JSONDecoder())
+//        return URLSession.shared.dataTaskPublisher(for: API.fetchTodos.url)
+//            .map { $0.data }
+//            .decode(type: [Todo].self, decoder: JSONDecoder())
+//            .eraseToAnyPublisher()
+        return AF.request(API.fetchTodos.url)
+            .publishDecodable(type: [Todo].self)
+            .value()
+            // 형태가 AnyPublisher<[Todo], Error> 이므로
+            // Error로 바꿔줘야함
+            .mapError({ AFError in return AFError as Error })
             .eraseToAnyPublisher()
     }
     
     func fetchPosts() -> AnyPublisher<[Post], Error> {
-        return URLSession.shared.dataTaskPublisher(for: API.fetchPosts.url)
-            .map { $0.data }
-            .decode(type: [Post].self, decoder: JSONDecoder())
+//        return URLSession.shared.dataTaskPublisher(for: API.fetchPosts.url)
+//            .map { $0.data }
+//            .decode(type: [Post].self, decoder: JSONDecoder())
+//            .eraseToAnyPublisher()
+        return AF.request(API.fetchPosts.url)
+            .publishDecodable(type: [Post].self)
+            .value()
+            .mapError({ AFError in return AFError as Error })
             .eraseToAnyPublisher()
     }
     
@@ -52,9 +66,14 @@ struct APIService {
     }
     
     func fetchUsers() -> AnyPublisher<[User], Error> {
-        return URLSession.shared.dataTaskPublisher(for: API.fetchUsers.url)
-            .map { $0.data }
-            .decode(type: [User].self, decoder: JSONDecoder())
+//        return URLSession.shared.dataTaskPublisher(for: API.fetchUsers.url)
+//            .map { $0.data }
+//            .decode(type: [User].self, decoder: JSONDecoder())
+//            .eraseToAnyPublisher()
+        return AF.request(API.fetchUsers.url)
+            .publishDecodable(type: [User].self)
+            .value()
+            .mapError({ AFError in return AFError as Error })
             .eraseToAnyPublisher()
     }
     
